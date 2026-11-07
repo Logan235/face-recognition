@@ -1,0 +1,75 @@
+# Root .gitignore - Face Recognition Web Project
+
+# ==========================================
+# Node.js / npm / pnpm
+# ==========================================
+node_modules/
+.pnpm-store/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+.lintstagedrc
+*.tsbuildinfo
+
+# ==========================================
+# Build outputs
+# ==========================================
+dist/
+build/
+*.tsbuildinfo
+
+# ==========================================
+# Environment files (keep .env.example)
+# ==========================================
+.env
+.env.local
+.env.*.local
+*.env
+
+# ==========================================
+# IDE / Editor
+# ==========================================
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# ==========================================
+# Python / AI Service
+# ==========================================
+ai-service/venv/
+ai-service/__pycache__/
+ai-service/*.pyc
+ai-service/.coverage
+ai-service/htmlcov/
+ai-service/.pytest_cache/
+ai-service/.mypy_cache/
+ai-service/*.egg-info/
+
+# ==========================================
+# Test / Coverage
+# ==========================================
+coverage/
+.nyc_output/
+*.lcov
+
+# ==========================================
+# OS specific
+# ==========================================
+*.log
+*.pid
+*.seed
+*.pid.lock
+
+# ==========================================
+# Temporary files
+# ==========================================
+*.tmp
+*.temp
+tmp/
+temp/

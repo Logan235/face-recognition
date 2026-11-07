@@ -1,0 +1,265 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Handsome Rating System - Hệ thống Đánh giá Độ đẹp trai</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+  </head>
+  <body class="bg-slate-900 text-slate-100 min-h-screen font-sans">
+    <div class="container mx-auto px-4 py-8 max-w-4xl">
+      <header class="text-center mb-8">
+        <h1
+          class="text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-pink-500 via-purple-500 to-indigo-500"
+        >
+          ✨ Handsome Rating System ✨
+        </h1>
+        <p class="text-slate-400 mt-2">
+          Hệ thống AI Đánh giá Độ đẹp trai & So sánh Tiêu chuẩn Vàng
+        </p>
+      </header>
+
+      <!-- Navigation Tabs -->
+      <div class="flex justify-center space-x-3 mb-8 flex-wrap gap-y-2">
+        <button
+          onclick="switchTab('scan')"
+          id="btn-scan"
+          class="px-5 py-2.5 bg-pink-600 rounded-xl font-semibold shadow-lg hover:bg-pink-500 transition flex items-center gap-2"
+        >
+          📸 Quét & Chấm điểm
+        </button>
+        <button
+          onclick="switchTab('register')"
+          id="btn-register"
+          class="px-5 py-2.5 bg-slate-800 rounded-xl font-semibold shadow-lg hover:bg-slate-700 transition flex items-center gap-2"
+        >
+          📝 Đăng ký Khuôn mặt
+        </button>
+        <button
+          onclick="switchTab('leaderboard')"
+          id="btn-leaderboard"
+          class="px-5 py-2.5 bg-slate-800 rounded-xl font-semibold shadow-lg hover:bg-slate-700 transition flex items-center gap-2"
+        >
+          🏆 Bảng Xếp Hạng
+        </button>
+      </div>
+
+      <!-- Tab 1: Scan & Recognize -->
+      <div
+        id="tab-scan"
+        class="bg-slate-800 p-6 rounded-2xl shadow-xl border border-slate-700 max-w-xl mx-auto"
+      >
+        <h2 class="text-2xl font-bold mb-4 text-center text-pink-400">
+          Camera Quét Nhận Diện
+        </h2>
+        <div
+          class="relative rounded-xl overflow-hidden bg-black aspect-video flex items-center justify-center border-2 border-slate-700 shadow-inner"
+        >
+          <video
+            id="webcam"
+            autoplay
+            playsinline
+            class="w-full h-full object-cover"
+          ></video>
+          <div
+            id="scan-overlay"
+            class="absolute inset-0 border-4 border-dashed border-pink-500/40 rounded-xl pointer-events-none animate-pulse flex items-center justify-center"
+          >
+            <span
+              class="bg-slate-900/80 text-pink-300 text-xs px-3 py-1 rounded-full font-medium"
+              >Đang quét khuôn mặt...</span
+            >
+          </div>
+        </div>
+        <div class="mt-4 flex justify-between items-center">
+          <button
+            onclick="startCamera()"
+            class="px-4 py-2 bg-emerald-600 rounded-lg font-medium hover:bg-emerald-500 transition shadow"
+          >
+            Bật Camera
+          </button>
+          <button
+            onclick="triggerManualScan()"
+            class="px-6 py-2 bg-pink-600 rounded-lg font-bold hover:bg-pink-500 transition shadow"
+          >
+            Quét Ngay
+          </button>
+          <button
+            onclick="stopCamera()"
+            class="px-4 py-2 bg-rose-600 rounded-lg font-medium hover:bg-rose-500 transition shadow"
+          >
+            Tắt Camera
+          </button>
+        </div>
+        <div
+          id="status-box"
+          class="mt-4 p-4 rounded-xl bg-slate-900 text-center text-base font-medium border border-slate-700 text-slate-300"
+        >
+          Nhấn "Bật Camera" để bắt đầu hành trình thẩm định nhan sắc!
+        </div>
+      </div>
+
+      <!-- Tab 2: Register -->
+      <div
+        id="tab-register"
+        class="bg-slate-800 p-6 rounded-2xl shadow-xl border border-slate-700 max-w-md mx-auto hidden"
+      >
+        <h2 class="text-2xl font-bold mb-4 text-center text-indigo-400">
+          Đăng Ký Khuôn Mặt Mới
+        </h2>
+        <div
+          class="relative rounded-xl overflow-hidden bg-black aspect-square mb-4 flex items-center justify-center border-2 border-slate-700 shadow-inner"
+        >
+          <video
+            id="reg-webcam"
+            autoplay
+            playsinline
+            class="w-full h-full object-cover"
+          ></video>
+          <div
+            class="absolute inset-0 border-4 border-dashed border-indigo-500/40 rounded-xl pointer-events-none animate-pulse"
+          ></div>
+        </div>
+        <div class="flex justify-between mb-4">
+          <button
+            onclick="startRegCamera()"
+            class="px-4 py-2 bg-emerald-600 rounded-lg font-medium hover:bg-emerald-500 transition shadow flex-1 mr-2"
+          >
+            Bật Camera
+          </button>
+          <button
+            onclick="captureSnapshot()"
+            class="px-4 py-2 bg-indigo-600 rounded-lg font-bold hover:bg-indigo-500 transition shadow flex-1 ml-2"
+          >
+            📸 Chụp Ảnh
+          </button>
+          <button
+            onclick="stopRegCamera()"
+            class="px-4 py-2 bg-rose-600 rounded-lg font-medium hover:bg-rose-500 transition shadow flex-1 ml-2"
+          >
+            Tắt Camera
+          </button>
+        </div>
+
+        <div id="snapshot-preview" class="hidden mb-4">
+          <p class="text-sm text-center text-slate-400 mb-2">Ảnh đã chụp:</p>
+          <div
+            class="relative rounded-xl overflow-hidden bg-black aspect-square flex items-center justify-center border-2 border-indigo-500 shadow-inner"
+          >
+            <img
+              id="captured-img"
+              src=""
+              alt="Captured"
+              class="w-full h-full object-cover"
+            />
+          </div>
+          <button
+            onclick="retakeSnapshot()"
+            class="mt-2 w-full px-4 py-2 bg-amber-600 rounded-lg font-medium hover:bg-amber-500 transition shadow"
+          >
+            🔄 Chụp lại
+          </button>
+        </div>
+
+        <form id="register-form" class="space-y-4">
+          <div>
+            <label class="block text-sm font-medium text-slate-300 mb-1"
+              >Họ và Tên <span class="text-rose-500">*</span></label
+            >
+            <input
+              type="text"
+              id="reg-name"
+              name="name"
+              required
+              class="w-full px-4 py-2 bg-slate-900 border border-slate-700 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none"
+              placeholder="Nguyễn Văn A"
+            />
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-slate-300 mb-1"
+              >Mã Sinh Viên / ID <span class="text-rose-500">*</span></label
+            >
+            <input
+              type="text"
+              id="reg-student-id"
+              name="studentId"
+              required
+              class="w-full px-4 py-2 bg-slate-900 border border-slate-700 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none"
+              placeholder="B21DCCN123"
+            />
+          </div>
+          <button
+            type="submit"
+            class="w-full px-6 py-3 bg-gradient-to-r from-indigo-600 to-purple-600 rounded-lg font-bold text-lg hover:from-indigo-500 hover:to-purple-500 transition shadow-lg"
+          >
+            🚀 Gửi AI Chấm Điểm & Đăng Ký
+          </button>
+        </form>
+      </div>
+
+      <!-- Tab 3: Leaderboard -->
+      <div
+        id="tab-leaderboard"
+        class="bg-slate-800 p-6 rounded-2xl shadow-xl border border-slate-700 max-w-4xl mx-auto hidden"
+      >
+        <div class="flex justify-between items-center mb-6">
+          <h2 class="text-2xl font-bold text-amber-400">
+            🏆 Bảng Xếp Hạng Nam Thần
+          </h2>
+          <button
+            onclick="loadLeaderboard()"
+            class="px-4 py-2 bg-amber-600 rounded-lg font-medium hover:bg-amber-500 transition shadow flex items-center gap-2"
+          >
+            🔄 Làm mới
+          </button>
+        </div>
+        <div id="leaderboard-loading" class="text-center py-8 text-slate-400">
+          Đang tải dữ liệu...
+        </div>
+        <div id="leaderboard-table" class="hidden overflow-x-auto">
+          <table class="w-full">
+            <thead>
+              <tr
+                class="border-b border-slate-700 text-left text-slate-400 text-sm font-semibold"
+              >
+                <th class="py-3 px-4 w-16">Hạng</th>
+                <th class="py-3 px-4">Tên</th>
+                <th class="py-3 px-4">Mã SV</th>
+                <th class="py-3 px-4 text-center">Điểm</th>
+                <th class="py-3 px-4">Nhận xét AI</th>
+              </tr>
+            </thead>
+            <tbody
+              id="leaderboard-body"
+              class="divide-y divide-slate-700/50"
+            ></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal kết quả quét/đăng ký -->
+    <div
+      id="result-modal"
+      class="fixed inset-0 z-50 hidden items-center justify-center bg-black/70 backdrop-blur-sm p-4"
+    >
+      <div
+        class="bg-slate-800 rounded-2xl shadow-2xl border border-slate-700 max-w-md w-full p-6 relative animate-scale-in"
+      >
+        <button
+          onclick="closeModal()"
+          class="absolute top-4 right-4 text-slate-400 hover:text-white transition text-2xl leading-none"
+        >
+          ×
+        </button>
+
+        <div id="modal-content" class="text-center">
+          <!-- Nội dung động -->
+        </div>
+      </div>
+    </div>
+
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
